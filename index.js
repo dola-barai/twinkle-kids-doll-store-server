@@ -26,6 +26,7 @@ async function run() {
     await client.connect();
 
     const kidsDollCollection = client.db('kidsDoll').collection('allToys');
+    const addedToyCollection = client.db('kidsDoll').collection('addToy');
 
     app.get('/allToys', async(req, res) => {
         const cursor = kidsDollCollection.find();
@@ -39,6 +40,13 @@ async function run() {
         const result = await kidsDollCollection.findOne(query);
         res.send(result);
     });
+
+    app.post('/addToy', async(req, res) => {
+      const addToy = req.body;
+      console.log(addToy);
+      const result = await addedToyCollection.insertOne(addToy);
+      res.send(result)
+    })
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });

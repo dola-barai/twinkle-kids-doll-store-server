@@ -57,13 +57,6 @@ async function run() {
       });
 
       res.send(sortedToys);
-      // const descendingOrderToys = await addedToyCollection.find(query).sort({ price: -1 }).toArray();
-      // const ascendingOrderToys = await addedToyCollection.find(query).sort({ price: 1 }).toArray();
-      // const sortedToys = {
-      //   Descending: descendingOrderToys,
-      //   Ascending: ascendingOrderToys
-      // };
-      // res.send(sortedToys);
     });
 
     app.get('/addToy/:id', async(req, res) => {

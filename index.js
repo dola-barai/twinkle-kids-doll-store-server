@@ -29,7 +29,10 @@ async function run() {
     const addedToyCollection = client.db('kidsDoll').collection('addToy');
 
     app.get('/allToys', async(req, res) => {
-        const cursor = kidsDollCollection.find();
+        const query = {};
+        const sort = { length: -1 };
+        const limit = 20;
+        const cursor = kidsDollCollection.find(query).sort(sort).limit(limit);
         const result = await cursor.toArray();
         res.send(result);
     });
@@ -42,9 +45,25 @@ async function run() {
     });
 
     app.get('/addToy', async(req, res) => {
-      const cursor = addedToyCollection.find();
-      const result = await cursor.toArray();
-      res.send(result);
+      const sortOrder = req.query.sortOrder || 'ascending';
+      const cursor = addedToyCollection.find(); 
+      const toys = await cursor.toArray();
+      const sortedToys = toys.sort((a, b) => {
+        if (sortOrder === 'descending') {
+          return b.price - a.price; // Sort in descending order
+        } else {
+          return a.price - b.price; // Sort in ascending order (default)
+        }
+      });
+
+      res.send(sortedToys);
+      // const descendingOrderToys = await addedToyCollection.find(query).sort({ price: -1 }).toArray();
+      // const ascendingOrderToys = await addedToyCollection.find(query).sort({ price: 1 }).toArray();
+      // const sortedToys = {
+      //   Descending: descendingOrderToys,
+      //   Ascending: ascendingOrderToys
+      // };
+      // res.send(sortedToys);
     });
 
     app.get('/addToy/:id', async(req, res) => {

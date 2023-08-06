@@ -27,6 +27,12 @@ async function run() {
 
     const kidsDollCollection = client.db('kidsDoll').collection('allToys');
     const addedToyCollection = client.db('kidsDoll').collection('addToy');
+    const reviewCollection = client.db('kidsDoll').collection('reviews');
+
+    app.get('/reviews', async (req, res) => {
+      const result = await reviewCollection.find().toArray();
+      res.send(result)
+    })
 
     app.get('/allToys', async(req, res) => {
         const query = {};
